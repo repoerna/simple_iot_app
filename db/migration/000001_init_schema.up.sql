@@ -1,0 +1,30 @@
+CREATE TABLE device (
+  Id BIGSERIAL PRIMARY KEY NOT NULL,
+  Name VARCHAR NOT NULL,
+  ShortName VARCHAR NOT NULL,
+  Enabled BOOLEAN NOT NULL,
+  CreatedAt TIMESTAMP NOT NULL,
+  UpdatedAt TIMESTAMP NOT NULL
+);
+
+CREATE TABLE telemetry (
+  Id BIGSERIAL PRIMARY KEY NOT NULL,
+  DeviceId BIGINT NOT NULL,
+  CreatedAt TIMESTAMP NOT NULL,
+  Latitude DOUBLE PRECISION DEFAULT NULL,
+  Longitude DOUBLE PRECISION DEFAULT NULL,
+  Value FLOAT DEFAULT NULL,
+  Value2 FLOAT DEFAULT NULL,
+  Value3 FLOAT DEFAULT NULL,
+  Value4 FLOAT DEFAULT NULL
+);
+
+ALTER TABLE telemetry ADD FOREIGN KEY (DeviceId) REFERENCES device (Id) on delete cascade on update cascade;
+
+CREATE UNIQUE INDEX UQ_Device_Name ON device (Name);
+
+CREATE UNIQUE INDEX UQ_Device_ShortName ON device (ShortName);
+
+CREATE UNIQUE INDEX UQ_CreatedAt_DeviceId ON telemetry (CreatedAt, DeviceId);
+
+CREATE INDEX DeviceId ON telemetry (DeviceId);
